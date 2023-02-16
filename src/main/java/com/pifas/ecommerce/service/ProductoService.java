@@ -1,0 +1,16 @@
+package com.pifas.ecommerce.service;
+
+import java.util.Optional;
+
+import com.pifas.ecommerce.model.Producto;
+
+public interface ProductoService {
+
+	public Producto save(Producto producto);
+	
+	public Optional<Producto> get(Integer id);
+	
+	public void update (Producto producto);
+	
+	public void delelte (Integer id);
+}
