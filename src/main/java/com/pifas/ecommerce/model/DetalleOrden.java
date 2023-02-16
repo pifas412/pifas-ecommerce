@@ -1,15 +1,33 @@
 package com.pifas.ecommerce.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "detalles")
 public class DetalleOrden {
 
-	private Integer id; 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 	private String nombre;
 	private double cantidad;
-	private	double precio;
+	private double precio;
 	private double total;
 
+	@OneToOne
+	private Orden orden;
+
+	@ManyToOne
+	private Producto producto;
+
 	public DetalleOrden() {
-		
+
 	}
 
 	public DetalleOrden(Integer id, String nombre, double cantidad, double precio, double total) {
@@ -61,11 +79,26 @@ public class DetalleOrden {
 		this.total = total;
 	}
 
+	public Orden getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Orden orden) {
+		this.orden = orden;
+	}
+
+	public Producto getProducto() {
+		return producto;
+	}
+
+	public void setProducto(Producto producto) {
+		this.producto = producto;
+	}
+
 	@Override
 	public String toString() {
 		return "DetalleOrden [id=" + id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", precio=" + precio
 				+ ", total=" + total + "]";
 	}
-	
-	
+
 }
