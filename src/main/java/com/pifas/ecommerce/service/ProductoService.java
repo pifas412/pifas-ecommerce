@@ -1,5 +1,6 @@
 package com.pifas.ecommerce.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.pifas.ecommerce.model.Producto;
@@ -13,4 +14,7 @@ public interface ProductoService {
 	public void update (Producto producto);
 	
 	public void delelte (Integer id);
+	
+	public List<Producto> findAll();
+
 }
