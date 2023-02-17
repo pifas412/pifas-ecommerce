@@ -13,7 +13,7 @@ public interface ProductoService {
 	
 	public void update (Producto producto);
 	
-	public void delelte (Integer id);
+	public void delete (Integer id);
 	
 	public List<Producto> findAll();
 
