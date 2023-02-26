@@ -1,5 +1,9 @@
 package com.pifas.ecommerce.controller;
 
+import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +34,32 @@ public class UsuarioController {
 		logger.info("Usuario registro : {}" + usuario);
 		usuario.setTipo("USER");
 		usuarioService.save(usuario);
-
 		return "redirect:/";
 	}
 
+	@GetMapping("/login")
+	public String login() {
+
+		return "usuario/login";
+	}
+
+	
+	@PostMapping("/acceder")
+	public String acceder(Usuario usuario, HttpSession session) {
+		logger.info("Accesos : {}", usuario );
+		Optional<Usuario> user = usuarioService.findByEmail(usuario.getEmail());
+		//logger.info("Usuario de db :{}", user.getClass());
+		if(user.isPresent()) {
+			session.setAttribute("idusuario", user.get().getId());
+			if(user.get().getTipo().equals("ADMIN")) {
+				return"redirect:/administrador";
+			}else {
+				return "redirect:/";
+			}
+		}else {
+			logger.info("usuario no existe");
+		}
+		return "redirect:/";
+	}
+	
 }
