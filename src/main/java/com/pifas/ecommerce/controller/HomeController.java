@@ -1,7 +1,7 @@
 package com.pifas.ecommerce.controller;
 
 import java.util.ArrayList;
-
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +22,8 @@ import com.pifas.ecommerce.model.Orden;
 import com.pifas.ecommerce.model.Producto;
 import com.pifas.ecommerce.model.Usuario;
 import com.pifas.ecommerce.repository.IUsuarioRepository;
+import com.pifas.ecommerce.service.IDetalleOrdenService;
+import com.pifas.ecommerce.service.IOrdenService;
 import com.pifas.ecommerce.service.IUsuarioService;
 import com.pifas.ecommerce.service.ProductoService;
 
@@ -36,7 +38,13 @@ public class HomeController {
 
 	@Autowired
 	private IUsuarioService usuarioService;
-	
+
+	@Autowired
+	private IOrdenService ordenService;
+
+	@Autowired
+	private IDetalleOrdenService detalleOrdenService;
+
 	// Para almacenar los detalles de la orden
 	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
 
@@ -131,16 +139,42 @@ public class HomeController {
 		model.addAttribute("orden", orden);
 		return "usuario/carrito";
 	}
-	
+
 	@GetMapping("/order")
 	public String order(Model model) {
-		
+
 		Usuario usuario = usuarioService.findById(1).get();
-		
+
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
 		model.addAttribute("usuario", usuario);
-		
+
 		return "usuario/resumenorden";
 	}
+
+	//Guardar la orden
+	@GetMapping("/saveOrder")
+	public String saveOrder() {
+		Date fechaCreacion = new Date();
+		orden.setFechaCreacion(fechaCreacion);
+		orden.setNumero(ordenService.generarNumeroOrden());
+
+		Usuario usuario = usuarioService.findById(1).get();
+
+		orden.setUsuario(usuario);
+		ordenService.save(orden);
+
+		// Guardar detalles
+		for (DetalleOrden dt : detalles) {
+			dt.setOrden(orden);
+			detalleOrdenService.save(dt);
+		}
+
+		// limpiar lista y orden
+		orden = new Orden();
+		detalles.clear();
+
+		return "redirect:/";
+	}
+
 }
