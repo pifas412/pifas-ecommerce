@@ -3,6 +3,7 @@ package com.pifas.ecommerce.service;
 import java.util.List;
 
 import com.pifas.ecommerce.model.Orden;
+import com.pifas.ecommerce.model.Usuario;
 
 public interface IOrdenService {
 
@@ -11,4 +12,6 @@ public interface IOrdenService {
 	Orden save (Orden orden);
 	
 	String generarNumeroOrden();
+	
+	List<Orden> findByUsuario(Usuario usuario);
 }
